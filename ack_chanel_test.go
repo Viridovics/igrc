@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAckMsg(t *testing.T) {
+func TestConfAckMsg(t *testing.T) {
 	msgProcessed := false
 	message := MakeAckMsg(100)
 
@@ -22,4 +22,16 @@ func TestAckMsg(t *testing.T) {
 	messageChan <- message
 	<-message.Ack()
 	assert.True(t, msgProcessed)
+}
+
+func TestDoubleConfCall(t *testing.T) {
+	message := MakeAckMsg(100)
+	message.Conf()
+	message.Conf()
+}
+
+func TestDoubleCloseCall(t *testing.T) {
+	message := MakeAckMsg(100)
+	message.Close()
+	message.Close()
 }
