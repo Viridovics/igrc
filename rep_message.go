@@ -41,7 +41,7 @@ func (m *RepMsg[T, R]) execWithClosing(f func()) {
 	m.closed = true
 }
 
-func (m *RepMsg[T, R]) WaitResp() <-chan R {
+func (m *RepMsg[T, R]) Response() <-chan R {
 	return m.repChan
 }
 

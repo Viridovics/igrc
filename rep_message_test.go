@@ -21,7 +21,7 @@ func TestRepMsg(t *testing.T) {
 		msg.Reply(1.0)
 	}()
 	messageChan <- message
-	resp := <-message.WaitResp()
+	resp := <-message.Response()
 	assert.True(t, msgProcessed)
 	assert.Equal(t, 1.0, resp)
 }
@@ -29,11 +29,11 @@ func TestRepMsg(t *testing.T) {
 func TestRepMsgDoubleReplyCall(t *testing.T) {
 	message := MakeRepMsg[int, bool](100)
 	message.Reply(true)
-	resp, ok := <-message.WaitResp()
+	resp, ok := <-message.Response()
 	assert.True(t, resp)
 	assert.True(t, ok)
 	message.Reply(true)
-	_, ok = <-message.WaitResp()
+	_, ok = <-message.Response()
 	assert.False(t, ok)
 }
 
@@ -47,6 +47,6 @@ func TestRepMsgReplyAfterClose(t *testing.T) {
 	message := MakeRepMsg[int, bool](100)
 	message.Close()
 	message.Reply(true)
-	_, ok := <-message.WaitResp()
+	_, ok := <-message.Response()
 	assert.False(t, ok)
 }

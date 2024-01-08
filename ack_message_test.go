@@ -21,7 +21,7 @@ func TestAckMsg(t *testing.T) {
 		msg.Ack()
 	}()
 	messageChan <- message
-	<-message.WaitAck()
+	<-message.C()
 	assert.True(t, msgProcessed)
 }
 

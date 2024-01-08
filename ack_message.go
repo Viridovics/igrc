@@ -36,7 +36,7 @@ func (m *AckMsg[T]) Close() {
 	m.closed = true
 }
 
-func (m *AckMsg[T]) WaitAck() <-chan Ack {
+func (m *AckMsg[T]) C() <-chan Ack {
 	return m.ackChan
 }
 
