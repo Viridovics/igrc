@@ -2,11 +2,11 @@ package igrc
 
 import "sync"
 
-type Ack <-chan struct{}
+type Ack struct{}
 
 type AckMsg[T any] struct {
 	body    T
-	ackChan chan struct{}
+	ackChan chan Ack
 	closed  bool
 	lock    *sync.Mutex
 }
@@ -14,12 +14,12 @@ type AckMsg[T any] struct {
 func MakeAckMsg[T any](body T) AckMsg[T] {
 	return AckMsg[T]{
 		body:    body,
-		ackChan: make(chan struct{}),
+		ackChan: make(chan Ack),
 		lock:    new(sync.Mutex),
 	}
 }
 
-func (m *AckMsg[T]) Conf() {
+func (m *AckMsg[T]) Ack() {
 	m.Close()
 }
 
@@ -36,7 +36,7 @@ func (m *AckMsg[T]) Close() {
 	m.closed = true
 }
 
-func (m *AckMsg[T]) Ack() Ack {
+func (m *AckMsg[T]) WaitAck() <-chan Ack {
 	return m.ackChan
 }
 
